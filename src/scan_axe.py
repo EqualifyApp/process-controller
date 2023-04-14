@@ -1,6 +1,8 @@
 import sys
 import json
 import time
+import threading
+from concurrent.futures import ThreadPoolExecutor
 from utils.watch import logger
 from data.select import next_axe_url
 from data.insert import scan_axe_new_event
@@ -11,9 +13,8 @@ sys.path.append(".")
 
 
 # Roll the Axes
-def axe_the_things():
+def axe_the_things(target, url_id):
     logger.info('Dropping the Axe')
-    target, url_id = next_axe_url()
     logger.debug(f'Next URL {url_id} = {target}')
 
     # Run Axe Check
@@ -65,7 +66,7 @@ def axe_the_things():
             for result_type in result_types:
                 results = axe_scan_output[result_type]
 
-            logger.info("Processing completed successfully")
+            logger.info(" 🟢 Processing completed successfully")
 
            # with open("data.json", "r") as f:
            #     data = json.load(f)
@@ -87,17 +88,37 @@ def axe_the_things():
             mark_url_scanned_result = mark_url_axe_scanned(url_id)
 
             if mark_url_scanned_result:
-                logger.info("URL marked as scanned successfully")
+                logger.info("URL: 🟢 {url_id} Complete")
             else:
                 logger.critical("Failed to mark URL as scanned")
-                time.sleep(60)
+                time.sleep(5)
 
 
-def yeet_axes():
-    continue_scanning = True
-    while continue_scanning:
-        axe_the_things()
+def yeet_axes(stop_flag):
+    batch_size = 10
+    max_workers = 5
+
+    while True:
+        # Get a batch of URLs
+        urls = [next_axe_url() for _ in range(batch_size)]
+        # Check if stop flag is set
+        if stop_flag.is_set():
+            return
+
+        # Stop if no more URLs are available
+        if not any(urls):
+            break
+
+        # Define a processing function for ThreadPoolExecutor
+        def process_url(url_tuple):
+            if url_tuple is None:
+                return
+            axe_the_things(*url_tuple)
+
+        # Use ThreadPoolExecutor for concurrent processing
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            executor.map(process_url, urls)
 
 
 if __name__ == '__main__':
-    yeet_axes()
+    yeet_axes(threading.Event())

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXE Scanner</title>
+    <script>
+        function updateData() {
+            fetch('/get_recent_log')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('most-recent-url').innerText = data.most_recent_log;
+                })
+                .catch(error => {
+                    console.error('Error fetching recent log:', error);
+                });
+
+            fetch('/get_status')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('status').innerText = data;
+                })
+                .catch(error => {
+                    console.error('Error fetching status:', error);
+                });
+        }
+
+        setInterval(updateData, 5000);  // Update every 5 seconds
+    </script>
+
+</head>
+<body>
+    <h1>AXE Scanner</h1>
+    <h2>Status: <span id="status">{{ status }}</span></h2>
+    <h3>Most recent URL: <span id="most-recent-url">{{ most_recent_url }}</span></h3>
+    <form action="/start" method="post">
+        <input type="submit" value="Start">
+    </form>
+    <form action="/stop" method="post">
+        <input type="submit" value="Stop">
+    </form>
+</body>
+</html>

@@ -1,13 +1,13 @@
-import os
 import requests
 import json
 from utils.watch import logger
 from data.update import tech_check_failure  # Add this import
 
+
 def run_tech_check(target, url_id):
     # Run Tech Check
     logger.debug(f'Running tech check for URL ID: {url_id} and target: {target}')
-    response = requests.get(f"https://techcheck.beltway.cloud/extract?url={target}")
+    response = requests.get(f"https://turbosquid.beltway.cloud/extract?url={target}")
     # logger.debug(f'From Process: {response} ')
 
     if response.status_code == 200:
@@ -42,11 +42,12 @@ def run_tech_check(target, url_id):
             logger.error(f'Bad failure mark for URL ID: {url_id}')
         return False
 
+
 def scan_axe_it(target):
     logger.debug(f'Starting Axe Check of: {target}')
 
     # Send Request to Axe
-    response = requests.get(f"https://axe-check.beltway.cloud/axe?url={target}")
+    response = requests.get(f"https://turbosquid.beltway.cloud/axe?url={target}")
 
     # Check response status code
     if response.status_code == 200:
@@ -60,6 +61,7 @@ def scan_axe_it(target):
         logger.error(error_msg)
         # Return None and the error message
         return None, error_msg
+
 
 def scan_axe_process(response):
     # Select only a few fields from response
@@ -76,27 +78,3 @@ def scan_axe_process(response):
         "passes": passes,
         "violations": violations
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

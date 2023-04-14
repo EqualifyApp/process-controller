@@ -1,17 +1,41 @@
-# Install base image
-FROM alpine:latest
+# Use the official Python image as the base image
+FROM python:3.8-slim
 
+# Set the working directory
+WORKDIR /app
 
+# Copy the requirements file into the container
+COPY requirements.txt .
 
-# Make port available to the world outside this container
-# The port number is now set as an environment variable with a default value of 8083
-ENV APP_PORT 8083
+# Install the required packages
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Set up the proxy environment variables
-ENV http_proxy http://192.168.1.15:18888
-ENV https_proxy http://192.168.1.15:18888
+# Copy the rest of the application code into the container
+COPY . .
 
-EXPOSE $APP_PORT
+# Expose the port the app will run on
+EXPOSE 5000
 
-# Define environment variable
-ENV FLASK_APP axe.py
+# Start the application
+CMD ["python", "app.py"]
+# Use the official Python image as the base image
+FROM python:3.8-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the requirements file into the container
+COPY requirements.txt .
+
+# Install the required packages
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code into the container
+COPY . .
+
+# Expose the port the app will run on
+EXPOSE 5000
+
+# Start the application
+CMD ["python", "app.py"]
+

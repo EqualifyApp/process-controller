@@ -1,28 +1,41 @@
 import logging
 
-# Add logging to each file with
-#   from utils.watch import logger
+
+class FlaskOutputHandler(logging.Handler):
+    def __init__(self, output_list):
+        super().__init__()
+        self.output_list = output_list
+
+    def emit(self, record):
+        msg = self.format(record)
+        self.output_list.append(msg)
 
 
-# Set up logger: "A11yLogger"
-logger = logging.getLogger("A11y🪵 ")
 
-# Check if logger already has handlers
-if not logger.hasHandlers():
-    logger.setLevel(logging.INFO)
+def setup_custom_logger(output_list=None):
+    logger = logging.getLogger("A11y🪵")
+    if not logger.hasHandlers():
+        logger.setLevel(logging.INFO)
 
-    # Create console handler and set level to info
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - [%(levelname)s] - %(message)s')
 
-    # Create formatter and add it to the handler
-    formatter = logging.Formatter('%(asctime)s - %(name)s - [%(levelname)s] - %(message)s')
-    ch.setFormatter(formatter)
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.INFO)
+        ch.setFormatter(formatter)
+        logger.addHandler(ch)
 
-    # Add the console handler to the logger
-    logger.addHandler(ch)
+        if output_list is not None:
+            fh = FlaskOutputHandler(output_list)
+            fh.setLevel(logging.INFO)
+            fh.setFormatter(formatter)
+            logger.addHandler(fh)
 
-def configure_logger():
-     # Use the logger from logging_config.py
-     global logger
-     logger = logging.getLogger("A11y🪵 ")
+    return logger
+
+
+logger = setup_custom_logger()
+
+
+def configure_logger(output_list=None):
+    global logger
+    logger = setup_custom_logger(output_list)
