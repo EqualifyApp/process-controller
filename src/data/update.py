@@ -46,7 +46,7 @@ def execute_update(query, params=None, fetchone=True):
       # Execute the query
       cur.execute(query, params)
       conn.conn.commit()
-      logger.info(f'🗄️   🔧 Query executed and committed')
+      logger.debug(f'🗄️   🔧 Query executed and committed')
 
       # Fetch the results if requested
       result = None
@@ -86,7 +86,7 @@ def execute_bulk_update(query, params_list):
       # Execute the query
       with conn:
           cur.executemany(query, params_list)
-          logger.info("🗄️✏️🟢 Query executed and committed")
+          logger.debug("🗄️✏️🟢 Query executed and committed")
    except Exception as e:
       logger.error(f"🗄️✏️ Error executing bulk insert query: {e}\n{traceback.format_exc()}")
 

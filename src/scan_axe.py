@@ -14,8 +14,8 @@ sys.path.append(".")
 
 # Roll the Axes
 def axe_the_things(target, url_id):
-    logger.info('Dropping the Axe')
-    logger.debug(f'Next URL {url_id} = {target}')
+    logger.info(f'🪓🙅‍♂️ Dropping Axe on {url_id} - AKA - {target}')
+    # logger.debug(f'Next URL {url_id} = {target}')
 
     # Run Axe Check
     result, error = scan_axe_it(target)
@@ -66,7 +66,7 @@ def axe_the_things(target, url_id):
             for result_type in result_types:
                 results = axe_scan_output[result_type]
 
-            logger.info(" 🟢 Processing completed successfully")
+            logger.debug(" 🪓🟢 Processing completed successfully")
 
            # with open("data.json", "r") as f:
            #     data = json.load(f)
@@ -88,7 +88,7 @@ def axe_the_things(target, url_id):
             mark_url_scanned_result = mark_url_axe_scanned(url_id)
 
             if mark_url_scanned_result:
-                logger.info("URL: 🟢 {url_id} Complete")
+                logger.info(f'🪓✅  : {url_id}')
             else:
                 logger.critical("Failed to mark URL as scanned")
                 time.sleep(5)
@@ -103,6 +103,7 @@ def yeet_axes(stop_flag):
         urls = [next_axe_url() for _ in range(batch_size)]
         # Check if stop flag is set
         if stop_flag.is_set():
+            logger.info("Stop flag is set. Exiting yeet_axes().")
             return
 
         # Stop if no more URLs are available

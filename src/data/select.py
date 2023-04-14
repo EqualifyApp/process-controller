@@ -16,7 +16,7 @@ def execute_select(query, params=None, fetchone=True):
     # Execute the query
     cur.execute(query, params)
     conn.conn.commit()
-    logger.info("🗄️✏️🟢 Query executed and committed")
+    logger.debug("🗄️✏️🟢 Query executed and committed")
     # logger.debug(f"🗄️🔍 Executed select query: {query}")
     #   logger.debug(f"🗄️🔍 Query parameters: {params}")
 
@@ -91,7 +91,7 @@ def next_axe_url():
     result = execute_select(query)
     if result:
         target, url_id = result
-        logger.info(f'Snagged {url_id} : {target}')
+        logger.debug(f'Snagged {url_id} : {target}')
         return target, url_id
     else:
         logger.error(f'🗄️🔍 Unable to Get URL - Error: {e}')

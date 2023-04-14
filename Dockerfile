@@ -18,7 +18,7 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 COPY src /app/src
 
 # Expose the port the app runs on
-EXPOSE 5000
+EXPOSE 5001
 
 # Run app.py when the container launches
 CMD ["python", "src/app.py"]
