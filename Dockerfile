@@ -4,8 +4,9 @@ FROM python:3.9-slim as base
 # Set the working directory
 WORKDIR /app
 
-# Copy the requirements.txt file into the container
-COPY requirements.txt .
+# Copy the current directory contents into the container at /app
+COPY requirements.txt /app/
+COPY src /app/src/
 
 # Install required packages
 RUN apt-get update && \
