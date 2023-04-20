@@ -1,7 +1,8 @@
 import requests
 import json
+import time
 from utils.watch import logger
-from data.update import tech_check_failure  # Add this import
+from data.update import tech_check_failure  # TODO
 
 
 def run_tech_check(target, url_id):
@@ -51,7 +52,7 @@ def scan_axe_it(target):
 
     # Check response status code
     if response.status_code == 200:
-     #  logger.debug(f'From Process: {response.json()} ')
+       # logger.debug(f'From Process: {response.json()} ')
         # Return the response and no error
         return response.json(), None
 
@@ -61,6 +62,7 @@ def scan_axe_it(target):
         logger.error(error_msg)
         # Return None and the error message
         return None, error_msg
+        time.sleep(5)
 
 
 def scan_axe_process(response):
