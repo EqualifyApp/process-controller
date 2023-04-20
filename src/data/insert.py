@@ -113,7 +113,7 @@ def execute_bulk_insert(query, params_list):
 
 # Add Tech Apps
 def record_tech_apps(name, description, icon, saas, website, pricing, scriptsrc, headers, cookies, dom, implies, cat_implies, js, requires, requires_cat, meta, cats):
-    logger.info(f'🗄️✏️ Adding {name} to Tech Apps ')
+    logger.debug(f'🗄️✏️ Adding {name} to Tech Apps ')
     query = """
         INSERT INTO ref.tech_apps (
             name,
@@ -193,7 +193,6 @@ def scan_axe_new_event(url_id, scanned_at, failure, axe_meta):
 
 # Add Axe Results
 # Add Items
-# Add Items
 def insert_axe_items(scan_event_id, url_id, type, area, impact, tags):
     logger.debug(f'Insert: Beginning to add items...')
     query = """
@@ -240,7 +239,7 @@ def insert_axe_nodes(scan_event_id, url_id, html, impact, target, data, failure_
     """
     rows_affected = execute_bulk_insert(query, [(scan_event_id, url_id, html, impact, target, data, failure_summary)])
     if rows_affected == 1:
-        logger.debug(f'Insert: New Node Added...')
+        logger.debug(f'Insert: 🟢 New Node Added...')
     else:
         logger.error(f'Insert: Problem adding node. Values: scan_event_id={scan_event_id}, url_id={url_id}, html={html}, impact={impact}, target={target}, data={data}, failure_summary={failure_summary}')
         time.sleep(5)
@@ -268,7 +267,7 @@ def insert_axe_subnodes(scan_event_id, url_id, data, node_id, impact, message, n
     related_nodes_json = json.dumps(related_nodes)
     rows_affected = execute_bulk_insert(query, [(scan_event_id, url_id, node_id, data, impact, node_type, message, related_nodes_json)])
     if rows_affected == 1:
-        logger.debug(f'Insert: New Subnode Added...')
+        logger.debug(f'Insert: 🟢 New Subnode Added...')
     else:
         logger.error(f'Insert: Problem adding subnode. Values: scan_event_id={scan_event_id}, url_id={url_id}, node_id={node_id}, data={data}, impact={impact}, node_type={node_type}, message={message}, related_nodes={related_nodes}')
         time.sleep(5)
