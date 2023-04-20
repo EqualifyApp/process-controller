@@ -68,14 +68,20 @@ def next_axe_url():
                    id AS "url_id",
                    ROW_NUMBER() OVER (ORDER BY scanned_at_axe NULLS FIRST, created_at) AS row_num
             FROM targets.urls
-            WHERE active_main IS TRUE AND active_scan_axe IS TRUE
+            WHERE active_main IS TRUE
+                  AND active_scan_axe IS TRUE
+                  AND is_objective IS TRUE
+                  AND uppies_code BETWEEN 100 AND 299
             LIMIT 500
             OFFSET floor(random() * 100)
         ), latest_within_5_days AS (
             SELECT url AS "target",
                    id AS "url_id"
             FROM targets.urls
-            WHERE active_main IS TRUE AND active_scan_axe IS TRUE
+            WHERE active_main IS TRUE
+                  AND active_scan_axe IS TRUE
+                  AND is_objective IS TRUE
+                  AND uppies_code BETWEEN 100 AND 299
                   AND (scanned_at_axe IS NULL OR scanned_at_axe < NOW() - INTERVAL '5 days')
             ORDER BY scanned_at_axe DESC NULLS LAST
             LIMIT 1
