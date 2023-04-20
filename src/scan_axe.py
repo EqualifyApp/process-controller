@@ -14,8 +14,7 @@ sys.path.append(".")
 
 # Roll the Axes
 def axe_the_things(target, url_id):
-    logger.info(f'🪓🙅‍♂️ Dropping Axe on {url_id} - AKA - {target}')
-    # logger.debug(f'Next URL {url_id} = {target}')
+    logger.info(f'🪓🔍 Dropping Axe on {url_id} - AKA - {target}')
 
     # Run Axe Check
     result, error = scan_axe_it(target)
@@ -68,8 +67,6 @@ def axe_the_things(target, url_id):
 
             logger.debug(" 🪓🟢 Processing completed successfully")
 
-           # with open("data.json", "r") as f:
-           #     data = json.load(f)
 
             processed_data = {
                 "inapplicable": process_items(url_id, scan_event_id, result["inapplicable"], "inapplicable"),
@@ -81,9 +78,6 @@ def axe_the_things(target, url_id):
             with open("processed_data.json", "w") as f:
                 json.dump(processed_data, f, indent=2)
 
-                # with open("processed_data.json", "w") as f:
-                # json.dump(processed_data, f, indent=2)
-
             # Call the mark_url_axe_scanned function after processing is complete
             mark_url_scanned_result = mark_url_axe_scanned(url_id)
 
@@ -93,10 +87,9 @@ def axe_the_things(target, url_id):
                 logger.critical("Failed to mark URL as scanned")
                 time.sleep(5)
 
-
 def yeet_axes(stop_flag):
-    batch_size = 10
-    max_workers = 5
+    batch_size = 1
+    max_workers = 2
 
     while True:
         # Get a batch of URLs
@@ -104,11 +97,14 @@ def yeet_axes(stop_flag):
         # Check if stop flag is set
         if stop_flag.is_set():
             logger.info("Stop flag is set. Exiting yeet_axes().")
+            # break
             return
 
         # Stop if no more URLs are available
         if not any(urls):
             break
+
+        logger.debug(f"Processing URLs: {urls}")
 
         # Define a processing function for ThreadPoolExecutor
         def process_url(url_tuple):
