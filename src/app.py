@@ -54,16 +54,9 @@ def stop():
     return jsonify({'status': 'success', 'message': 'Stop signal sent'}), 200
 
 
-@app.route('/get_recent_log')
-def get_recent_log():
-    most_recent_log = output[-1]['message'] if output else ''
-    return jsonify({'most_recent_log': most_recent_log})
-
-
-@app.route('/get_status')
+@app.route('/status')
 def get_status():
     return status
-
 
 
 if __name__ == '__main__':
