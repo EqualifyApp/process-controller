@@ -15,18 +15,18 @@ class FlaskOutputHandler(logging.Handler):
 def setup_custom_logger(output_list=None):
     logger = logging.getLogger("A11y🪵")
     if not logger.hasHandlers():
-        logger.setLevel(logging.INFO)
+        logger.setLevel(logging.DEBUG)
 
         formatter = logging.Formatter('%(asctime)s - %(name)s - [%(levelname)s] - %(message)s')
 
         ch = logging.StreamHandler()
-        ch.setLevel(logging.INFO)
+        ch.setLevel(logging.DEBUG)
         ch.setFormatter(formatter)
         logger.addHandler(ch)
 
         if output_list is not None:
             fh = FlaskOutputHandler(output_list)
-            fh.setLevel(logging.INFO)
+            fh.setLevel(logging.DEBUG)
             fh.setFormatter(formatter)
             logger.addHandler(fh)
 
